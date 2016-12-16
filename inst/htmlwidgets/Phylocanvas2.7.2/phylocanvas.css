@@ -1,0 +1,10 @@
+body {
+  font-family: sans-serif;
+  margin: 20px;
+}
+
+#phylocanvas {
+  width: 1000px;
+  height: 1000px;
+}
+
