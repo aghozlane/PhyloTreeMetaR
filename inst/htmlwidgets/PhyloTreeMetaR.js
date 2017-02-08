@@ -14,7 +14,7 @@ HTMLWidgets.widget({
 
         // TODO: code to render the widget, e.g.
         //el.innerText = x.message;
-
+        console.log("PhyloTreeMetaR");
          // initialise the page 
         while (el.firstChild) {
             el.removeChild(el.firstChild);
@@ -88,6 +88,7 @@ HTMLWidgets.widget({
         function addData() {
           //console.log("redraw");
           var newick_str = x.data;
+          console.log("redraw"+ newick_str);
           //newick_str ='(A:0.1,B:0.2,(C:0.3,D:0.4)E:0.5)F;'
           //console.log(newick_str);
           phylocanvas = new PhyloCanvas.Tree('phylocanvas',{});
@@ -231,7 +232,7 @@ HTMLWidgets.widget({
                   var pourc = 0;
                   if (myrow[j] != 0){
                       pourc = (Math.log2(myrow[j])/max ) *100;
-                      console.log("p "+" "+myrow[j]+" "+Math.log2(myrow[j])+" "+pourc);// Math.round(
+                      //console.log("p "+" "+myrow[j]+" "+Math.log2(myrow[j])+" "+pourc);// Math.round(
                   }
                   //console.log(Math.round(pourc));
                   //console.log(deltaS[Math.round(pourc)]);
@@ -265,8 +266,8 @@ HTMLWidgets.widget({
 
           phylocanvas.viewMetadataColumns();
         }
-
-        window.onload = addData;
+        addData();
+        //window.onload = addData;
 
         function getRandomArbitrary(min, max) {
           return Math.random() * (max - min) + min;
