@@ -1001,7 +1001,8 @@
 
       if (!this.tree.metadataHeadingDrawn && this.tree.nodeAlign &&
         this.tree.treeType !== 'circular' && this.tree.treeType !== 'radial') {
-        this.drawMetadataHeading(tx, ty);
+	var tt = tx+10*width;
+        this.drawMetadataHeading(tt, ty,width);
         this.tree.metadataHeadingDrawn = true;
       }
 
@@ -1021,10 +1022,12 @@
 
         for (i = 0; i < metadata.length; i++) {
           columnName = metadata[i];
-          tx += metadataXStep;
+// MODIF size of the cell
+          tx += metadataXStep +10*width;
 
           this.canvas.fillStyle = this.data[columnName];
-          this.canvas.fillRect(tx, ty, width, height);
+          //this.canvas.fillRect(tx, ty, width, height);
+          this.canvas.fillRect(tx, ty, 11*width, 8*height);
           /*if (window.parseInt(this.data[columnName])) {
             this.canvas.fillStyle = this.tree.colour1;
             this.canvas.fillRect(tx, ty, width, height);
@@ -1037,7 +1040,7 @@
         this.canvas.closePath();
       }
     },
-    drawMetadataHeading: function (tx, ty) {
+    drawMetadataHeading: function (tx, ty,width) {
 
       if (this.tree.selectedMetadataColumns.length > 0) {
         metadata = this.tree.selectedMetadataColumns;
@@ -1047,12 +1050,12 @@
       }
 
       // Drawing Column headings
-      this.canvas.font = '12px Sans-serif';
+      this.canvas.font = '32px';
       this.canvas.fillStyle = 'black';
-
+      tx+=-5*width;
       for (var i = 0; i < metadata.length; i++) {
         columnName = metadata[i];
-        tx += this.tree.metadataXStep;
+        tx += this.tree.metadataXStep+10*width;
         // Rotate canvas to write column headings
         this.canvas.rotate(-Math.PI / 2);
         if (this.tree.treeType === 'rectangular') {
