@@ -987,6 +987,7 @@
       var ty = 0;
       var metadata = [];
       var height = this.tree.textSize;
+      //var height = 30;
       var width = this.tree.metadataXStep / 2;
       var i;
       var columnName;
@@ -1001,8 +1002,9 @@
 
       if (!this.tree.metadataHeadingDrawn && this.tree.nodeAlign &&
         this.tree.treeType !== 'circular' && this.tree.treeType !== 'radial') {
-	var tt = tx+10*width;
-        this.drawMetadataHeading(tt, ty,width);
+	     // var tt = tx+10*width;
+
+        this.drawMetadataHeading(tx, ty,width);
         this.tree.metadataHeadingDrawn = true;
       }
 
@@ -1027,7 +1029,7 @@
 
           this.canvas.fillStyle = this.data[columnName];
           //this.canvas.fillRect(tx, ty, width, height);
-          this.canvas.fillRect(tx, ty, 11*width, 8*height);
+          this.canvas.fillRect(tx, ty, 11*width, 4*height);
           /*if (window.parseInt(this.data[columnName])) {
             this.canvas.fillStyle = this.tree.colour1;
             this.canvas.fillRect(tx, ty, width, height);

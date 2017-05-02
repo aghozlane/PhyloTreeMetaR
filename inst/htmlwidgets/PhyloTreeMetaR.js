@@ -25,8 +25,8 @@ HTMLWidgets.widget({
         //divphylo.setAttribute("style","width: +1000");
         //divphylo.setAttribute("style","height: 1000");
 
-        var body = document.createElement("div");
-        body.id = "body";
+        var treeDiv = document.createElement("div");
+        treeDiv.id = "treeDiv";
         //body.setAttribute("style","width: 1000");
         //body.setAttribute("style","height: 1000");
         
@@ -63,16 +63,29 @@ HTMLWidgets.widget({
             //phylocanvas.draw();
         });
        
+        var slider = document.createElement("input");
+        slider.addEventListener(
+           'change',
+           function() { phylocanvas.setTextSize(this.value); },
+           false
+        );
+        slider.width= "100";
+        slider.type ="range";
+        slider.min = "10";
+        slider.value ="20";
+        slider.max = "80";
+        slider.step ="1";
+        slider.setAttribute("width","100");
 
-
-        body.appendChild(btn);
-        body.appendChild(btn2);
-        body.appendChild(btn3);
+        treeDiv.appendChild(btn);
+        treeDiv.appendChild(btn2);
+        treeDiv.appendChild(btn3);
+        treeDiv.appendChild(slider);
         
         //body.appendChild(btn5);
         //body.appendChild(btn4);
-        body.appendChild(divphylo);
-        el.appendChild(body);
+        treeDiv.appendChild(divphylo);
+        el.appendChild(treeDiv);
 
 
        // <button id="col1" onClick="phylocanvas.viewMetadataColumns(['Column1']);">Show Column1</button>
@@ -96,7 +109,7 @@ HTMLWidgets.widget({
           // Rectancgular tree
           //phylocanvas.setTreeType('rectangular');
           phylocanvas.setTreeType('rectangular');
-          
+          phylocanvas.setTextSize(20);
           //tree.fitInPanel(tree.findLeaves(/C|D/));
           //tree.draw();
           
@@ -111,160 +124,165 @@ HTMLWidgets.widget({
           //console.log(typeof(matrix));
           //console.log(matrix);
 
-          var arr =[];
-          var index=0;
-          for( var i in matrix ) {
-              if (matrix.hasOwnProperty(i)){
-                 //console.log(matrix[i]);
-                 arr.push(matrix[i]);
-                 index++;
-              }
-          }
-
-
-
-          console.log("arrlength "+ arr.length);
-          for (i = 0; i < arr.length; i++) { 
-              var myrow = arr[i];
-              //console.log(myrow.length);
-              for (j = 0; j < myrow.length; j++) { 
-                  console.log(i+ " "+j+ " "+myrow[j]);
-              }
-          }
-          
-          var arr2 =arr;
-
-          function transpose(a) {
-
-            // Calculate the width and height of the Array
-            var w = a.length ? a.length : 0,
-              h = a[0] instanceof Array ? a[0].length : 0;
-
-            // In case it is a zero matrix, no transpose routine needed.
-            if(h === 0 || w === 0) { return []; }
-
-            /**
-             * @var {Number} i Counter
-             * @var {Number} j Counter
-             * @var {Array} t Transposed data is stored in this array.
-             */
-            var i, j, t = [];
-
-            // Loop through every item in the outer array (height)
-            for(i=0; i<h; i++) {
-
-              // Insert a new row (array)
-              t[i] = [];
-
-              // Loop through every item per item in outer array (width)
-              for(j=0; j<w; j++) {
-
-                // Save transposed data.
-                t[i][j] = a[j][i];
-              }
+          // if there is an heatmap
+          //console.log('matrix '+matrix);
+          if (matrix !=null){
+            var arr =[];
+            var index=0;
+            for( var i in matrix ) {
+                if (matrix.hasOwnProperty(i)){
+                   //console.log(matrix[i]);
+                   arr.push(matrix[i]);
+                   index++;
+                }
             }
 
-            return t;
-          };
-          
-          arr = transpose(arr2);
-
-          var max =-1;
 
 
-          for (i = 1; i < arr.length; i++) { 
-              var myrow = arr[i];
-              //console.log(myrow.length);
-              for (j = 1; j < myrow.length; j++) { 
-                  console.log("a "+i+ " "+j+ " "+myrow[j]);
-                  max =Math.max(max,myrow[j]);
-              }
-          }
-          
-
-    
-          /*for( var i in matrix ) {
-            var t = matrix[i];
-
-            for( var j  in t ) {
-              console.log(j+" "+t[j]);
+            console.log("arrlength "+ arr.length);
+            for (i = 0; i < arr.length; i++) { 
+                var myrow = arr[i];
+                //console.log(myrow.length);
+                for (j = 0; j < myrow.length; j++) { 
+                    console.log(i+ " "+j+ " "+myrow[j]);
+                }
             }
-          }*/
-          var columns =[];
-          
-          var rowtmp =  arr[0];
-          for (i = 1; i < rowtmp.length; i++) { 
-                columns[i]=rowtmp[i];
-                console.log("column "+rowtmp[i]);
+            
+            var arr2 =arr;
+
+            function transpose(a) {
+
+              // Calculate the width and height of the Array
+              var w = a.length ? a.length : 0,
+                h = a[0] instanceof Array ? a[0].length : 0;
+
+              // In case it is a zero matrix, no transpose routine needed.
+              if(h === 0 || w === 0) { return []; }
+
+              /**
+               * @var {Number} i Counter
+               * @var {Number} j Counter
+               * @var {Array} t Transposed data is stored in this array.
+               */
+              var i, j, t = [];
+
+              // Loop through every item in the outer array (height)
+              for(i=0; i<h; i++) {
+
+                // Insert a new row (array)
+                t[i] = [];
+
+                // Loop through every item per item in outer array (width)
+                for(j=0; j<w; j++) {
+
+                  // Save transposed data.
+                  t[i][j] = a[j][i];
+                }
+              }
+
+              return t;
+            };
+            
+            arr = transpose(arr2);
+
+            var max =-1;
+
+
+            for (i = 1; i < arr.length; i++) { 
+                var myrow = arr[i];
+                //console.log(myrow.length);
+                for (j = 1; j < myrow.length; j++) { 
+                    console.log("a "+i+ " "+j+ " "+myrow[j]);
+                    max =Math.max(max,myrow[j]);
+                }
+            }
+            
+
       
-          }
+            /*for( var i in matrix ) {
+              var t = matrix[i];
 
-         
-
-
-          /*phylocanvas.branches['OTU_623'].data = {'Column1': 1, 'Column2': 0};
-          phylocanvas.branches['OTU_697'].data = {'Column1': 0, 'Column2': 1};
-          phylocanvas.branches['OTU_492'].data = {'Column1': 0, 'Column2': 1};
-          */
-
-          // add max to compute
-          //var max =20;
-          console.log(max+" "+ Math.log2(max));
-          max =  Math.log2(max);
-          var test = Math.log2(40000);
-          console.log("test2 "+test);
-          
-          //deltaS = generateColor("#138337","#f5f5f5",1000);
-          //deltaS = generateColor("#00ff00","#ff5247",1000);
-          deltaS = generateColor( "#000cff","#eaeeb1",100);
-          deltaS[0] ="#FFFFFF";
-          for (i = 1; i < arr.length; i++) { 
-              var myrow = arr[i];
-              
-              var randomColor ='#'+Math.floor(Math.random()*16777215).toString(16);
-
-              var tabCol = {};
-              for (j = 1; j < myrow.length; j++) { 
-                  //console.log(i+ " "+j+ " "+myrow[j]);
-                  //var myArray = [];
-                  var columnName = columns[j];
-                  //var pourc = (myrow[j]/max )*1000;
-                  var pourc = 0;
-                  if (myrow[j] != 0){
-                      pourc = (Math.log2(myrow[j])/max ) *100;
-                      //console.log("p "+" "+myrow[j]+" "+Math.log2(myrow[j])+" "+pourc);// Math.round(
-                  }
-                  //console.log(Math.round(pourc));
-                  //console.log(deltaS[Math.round(pourc)]);
-                  //tabCol[columnName] =randomColor;
-                  tabCol[columnName] =deltaS[Math.round(pourc)];
-                  
+              for( var j  in t ) {
+                console.log(j+" "+t[j]);
               }
-              console.log("!! " +myrow[0]);
-              phylocanvas.branches[myrow[0]].data = tabCol;
-          }
-
-          /*phylocanvas.
-            // config defaults 
-            scalebar: {
-              active: true,
-              width: 100,
-              height: 20,
-              fillStyle: 'black',
-              strokeStyle: 'black',
-              lineWidth: 1,
-              font: '16px Sans-serif',
-              textBaseline: 'bottom',
-              textAlign: 'center',
-              digits: 2,
-              position: {
-                bottom: 10,
-                left: 10,
-              },
+            }*/
+            var columns =[];
+            
+            var rowtmp =  arr[0];	
+  	        console.log('arrr '+arr[0]);
+            for (i = 1; i < rowtmp.length; i++) { 
+                  columns[i]=rowtmp[i];
+                  console.log("column "+rowtmp[i]);
+        
             }
-          })*/
 
-          phylocanvas.viewMetadataColumns();
+           
+
+
+            /*phylocanvas.branches['OTU_623'].data = {'Column1': 1, 'Column2': 0};
+            phylocanvas.branches['OTU_697'].data = {'Column1': 0, 'Column2': 1};
+            phylocanvas.branches['OTU_492'].data = {'Column1': 0, 'Column2': 1};
+            */
+
+            // add max to compute
+            //var max =20;
+            console.log(max+" "+ Math.log2(max));
+            max =  Math.log2(max);
+            var test = Math.log2(40000);
+            console.log("test2 "+test);
+            
+            //deltaS = generateColor("#138337","#f5f5f5",1000);
+            //deltaS = generateColor("#00ff00","#ff5247",1000);
+            deltaS = generateColor( "#000cff","#eaeeb1",100);
+            deltaS[0] ="#FFFFFF";
+            for (i = 1; i < arr.length; i++) { 
+                var myrow = arr[i];
+                
+                var randomColor ='#'+Math.floor(Math.random()*16777215).toString(16);
+
+                var tabCol = {};
+                for (j = 1; j < myrow.length; j++) { 
+                    //console.log(i+ " "+j+ " "+myrow[j]);
+                    //var myArray = [];
+                    var columnName = columns[j];
+                    //var pourc = (myrow[j]/max )*1000;
+                    var pourc = 0;
+                    if (myrow[j] != 0){
+                        pourc = (Math.log2(myrow[j])/max ) *100;
+                        //console.log("p "+" "+myrow[j]+" "+Math.log2(myrow[j])+" "+pourc);// Math.round(
+                    }
+                    //console.log(Math.round(pourc));
+                    //console.log(deltaS[Math.round(pourc)]);
+                    //tabCol[columnName] =randomColor;
+                    tabCol[columnName] =deltaS[Math.round(pourc)];
+                    
+                }
+                console.log("!! " +myrow[0]);
+                phylocanvas.branches[myrow[0]].data = tabCol;
+            }
+
+            /*phylocanvas.
+              // config defaults 
+              scalebar: {
+                active: true,
+                width: 100,
+                height: 20,
+                fillStyle: 'black',
+                strokeStyle: 'black',
+                lineWidth: 1,
+                font: '16px Sans-serif',
+                textBaseline: 'bottom',
+                textAlign: 'center',
+                digits: 2,
+                position: {
+                  bottom: 10,
+                  left: 10,
+                },
+              }
+            })*/
+
+            phylocanvas.viewMetadataColumns();
+          }
         }
         addData();
         //window.onload = addData;
@@ -329,6 +347,10 @@ HTMLWidgets.widget({
           return saida;
           
         }
+        function changeSize(){
+          var slider = document.getElementById('input');
+          phylocanvas.setTextSize(slider.value);
+        }
 
       },
 
@@ -337,7 +359,7 @@ HTMLWidgets.widget({
         // TODO: code to re-render the widget with a new size
 
       }
-
+      
 
 
     };
